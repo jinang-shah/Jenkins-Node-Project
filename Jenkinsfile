@@ -2,26 +2,21 @@ pipeline{
     agent any
     tools {nodejs "node"}
     stages {
-        stage('Clone Repository'){
+        stage('Checkout'){
             steps{
-                git branch: 'master',
-                    url: 'https://github.com/jinang-shah/jenkins-node-project.git'
+                checkout scm
             }
         }
         stage('Install Dependencies'){
-            steps {
-                sh 'npm install'
+            steps{
+                sh 'sudo npm install'
             }
         }
-         stage('Install pm2'){
+        stage('Build'){
             steps {
-                sh 'npm install pm2 -g'
+                sh 'npm run build'
             }
         }
-        stage('Deploy'){
-            steps {
-                sh 'pm2 startOrRestart pm2.config.json'
-            }
-        }
+        
     }
 }
