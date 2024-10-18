@@ -22,6 +22,16 @@ pipeline{
                 sh 'docker build -t  my-node--app:1.0 .'
             }
         }
+        stage('Push to Docker Registry'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]){
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    sh 'docker tag  my-node-app:1.0 jinangshah/node-docker-jenkins:1.0'
+                    sh 'docker push jinangshah/node-docker-jenkins:1.0'
+                    sh 'docker logout'
+                }
+            }
+        }
         
     }
 }
